@@ -18,5 +18,8 @@
     "build": "webpack",
     "watch": "webpack --watch",
     "start": "webpack serve --open"
+  },
+  "dependencies": {
+    "jquery": "^3.6.0"
   }
 }

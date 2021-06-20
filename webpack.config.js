@@ -5,6 +5,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
     mode: 'development',
     module: {
+        //不去解析jquery的依赖关系，可以省打包时间
+        noParse: /jquery/,
         rules: [
             {
                 test: /\.js$/, use: {
