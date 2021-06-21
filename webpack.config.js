@@ -6,6 +6,8 @@ module.exports = {
     mode: 'development',
     devServer: {
         contentBase: path.join(__dirname, 'dist'),
+        //自动打开浏览器
+        open: true,
         // compress: true,
         port: 9000,
     },
@@ -37,6 +39,12 @@ module.exports = {
         path: path.resolve(__dirname, 'dist'),
     },
     plugins: [
+        // 在引入某个库的时候需要去读取哪些任务清单，查看是否已经有该打包好的包
+        new webpack.DllReferencePlugin({
+            manifest: path.resolve(__dirname, 'dist', 'manifest.json')
+        }),
+
+
         // 自动把js插入到指定到html
         new HtmlWebpackPlugin({
             template: './src/index.html',
