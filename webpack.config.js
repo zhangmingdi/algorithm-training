@@ -1,15 +1,25 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-
+const webpack = require('webpack')
 
 module.exports = {
     mode: 'development',
+    devServer: {
+        contentBase: path.join(__dirname, 'dist'),
+        // compress: true,
+        port: 9000,
+    },
     module: {
         //不去解析jquery的依赖关系，可以省打包时间
         noParse: /jquery/,
         rules: [
             {
-                test: /\.js$/, use: {
+                test: /\.js$/,
+                // 不用处理的js
+                exclude: /node_modules/,
+                // 只需处理的js
+                include: path.resolve('src'),
+                use: {
                     loader: 'babel-loader',
                     options: {
                         presets: [
@@ -31,5 +41,9 @@ module.exports = {
         new HtmlWebpackPlugin({
             template: './src/index.html',
         }),
+
+        // 引入第三方包中指定一些没必要的引入 moment包不允许引入locale
+        new webpack.IgnorePlugin({ resourceRegExp: /\.\/locale/, contextRegExp: /moment/ })
+
     ]
 }

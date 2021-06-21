@@ -1,2 +1,5 @@
 import jquery from 'jquery'
-console.log('ssssss');
+import moment from 'moment';
+moment.locale('zh-cn')
+
+console.log('ssssss', moment().endOf('day').fromNow());
