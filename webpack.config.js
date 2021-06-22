@@ -87,5 +87,33 @@ module.exports = {
         // 引入第三方包中指定一些没必要的引入 moment包不允许引入locale
         new webpack.IgnorePlugin({ resourceRegExp: /\.\/locale/, contextRegExp: /moment/ })
 
-    ]
+    ],
+    optimization: {
+        // 分割代码块 多入口应用的时候才需要抽离公共import的部分
+        splitChunks: {
+            cacheGroups: {
+                // 要抽离的公共模块
+                common: {
+                    chunks: 'initial',
+                    //大小超过一个字节
+                    minSize: 0,
+                    //import过2次的
+                    minChunks: 2
+                },
+                // 要抽离的第三方模块
+                vendor: {
+                    //权重，优先抽离第三方模块，如果不加权重就会以上面的顺序抽离
+                    //上面会把第三方模块当成公共模块抽离出去，导致第三方模块和公共模块放在同一个文件
+                    priority: 1,
+                    // 把你抽离出来
+                    test: /node_modules/,
+                    chunks: 'initial',
+                    //大小超过一个字节
+                    minSize: 0,
+                    //import过2次的
+                    minChunks: 2
+                }
+            }
+        }
+    }
 }
