@@ -42,9 +42,12 @@ module.exports = {
             }
         ]
     },
-    entry: './src/index.js',
+    entry: {
+        index: './src/index.js',
+        other: './src/other.js'
+    },
     output: {
-        filename: 'bundle.js',
+        filename: '[name].js',
         path: path.resolve(__dirname, 'dist'),
     },
     plugins: [
@@ -71,9 +74,9 @@ module.exports = {
             ]
         }),
         // 在引入某个库的时候需要去读取哪些任务清单，查看是否已经有该打包好的包
-        new webpack.DllReferencePlugin({
-            manifest: path.resolve(__dirname, 'dist', 'manifest.json')
-        }),
+        // new webpack.DllReferencePlugin({
+        //     manifest: path.resolve(__dirname, 'dist', 'manifest.json')
+        // }),
 
 
         // 自动把js插入到指定到html
