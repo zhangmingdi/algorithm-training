@@ -1,6 +1,7 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const webpack = require('webpack')
+const webpack = require('webpack');
+const Happypack = require('happypack');
 
 module.exports = {
     mode: 'development',
@@ -21,15 +22,21 @@ module.exports = {
                 exclude: /node_modules/,
                 // 只需处理的js
                 include: path.resolve('src'),
-                use: {
-                    loader: 'babel-loader',
-                    options: {
-                        presets: [
-                            "@babel/preset-env",
-                            "@babel/preset-react"
-                        ]
-                    }
-                }
+                //使用id为js的happypack插件
+                use: 'Happypack/loader?id=js'
+                // use: {
+                //     loader: 'babel-loader',
+                //     options: {
+                //         presets: [
+                //             "@babel/preset-env",
+                //             "@babel/preset-react"
+                //         ]
+                //     }
+                // }
+            },
+            {
+                test: /\.css$/,
+                use: 'Happypack/loader?id=css'
             }
         ]
     },
@@ -39,6 +46,28 @@ module.exports = {
         path: path.resolve(__dirname, 'dist'),
     },
     plugins: [
+        // 启用多线程去打包代码，加快打包速度,记住只适合大项目，小项目分配多线程更花时间
+        new Happypack({
+            id: 'js',
+            use: [
+                {
+                    loader: 'babel-loader',
+                    options: {
+                        presets: [
+                            "@babel/preset-env",
+                            "@babel/preset-react"
+                        ]
+                    }
+                }
+            ]
+        }),
+        new Happypack({
+            id: 'css',
+            use: [
+                "style-loader",
+                "css-loader"
+            ]
+        }),
         // 在引入某个库的时候需要去读取哪些任务清单，查看是否已经有该打包好的包
         new webpack.DllReferencePlugin({
             manifest: path.resolve(__dirname, 'dist', 'manifest.json')
