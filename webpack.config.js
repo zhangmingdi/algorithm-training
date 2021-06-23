@@ -8,6 +8,8 @@ module.exports = {
     //这是import的好处
     mode: 'development',
     devServer: {
+        // 启用热更新
+        hot: true,
         contentBase: path.join(__dirname, 'dist'),
         //自动打开浏览器
         open: true,
@@ -85,7 +87,10 @@ module.exports = {
         }),
 
         // 引入第三方包中指定一些没必要的引入 moment包不允许引入locale
-        new webpack.IgnorePlugin({ resourceRegExp: /\.\/locale/, contextRegExp: /moment/ })
+        new webpack.IgnorePlugin({ resourceRegExp: /\.\/locale/, contextRegExp: /moment/ }),
+        // new webpack.NamedModulesPlugin(),
+        // 热更新插件
+        new webpack.HotModuleReplacementPlugin()
 
     ],
     optimization: {

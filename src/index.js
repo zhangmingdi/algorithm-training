@@ -1,7 +1,3 @@
-import './a'
-import './b'
-console.log('index.js')
+import str from './source'
 
-
-import $ from 'jquery'
-console.log('$$$$$$$$$$$$', $)
+console.log('gggg', str)
