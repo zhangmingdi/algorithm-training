@@ -4,7 +4,7 @@ import list from './list'
 let last
 
 
-// 反转整个链表
+// 递归反转整个链表
 function reviseList(list) {
 
     function doRevise(node) {
@@ -24,7 +24,7 @@ function reviseList(list) {
 }
 // reviseList(list)
 
-// 反转部分链表
+// 递归反转部分链表
 function reviseSomeList(header, i) {
 
     let num = 0
@@ -53,7 +53,7 @@ function reviseSomeList(header, i) {
 // reviseSomeList(list, 3)
 // console.log('gggggggg', reviseSomeList(list._head, 4));
 
-// 反转区间链表
+// 递归反转区间链表
 function reviseIncludeList(header, from, to) {
 
     if (from === 1) {
@@ -69,7 +69,7 @@ function reviseIncludeList(header, from, to) {
 // console.log('222', reviseIncludeList(list._head, 2, 4),);
 
 // reviseIncludeList(list)
-// 递归循环写法
+// 循环写法
 function reveseFor(head) {
     let pre = null
     let cur = head
@@ -86,7 +86,7 @@ function reveseFor(head) {
     return newHead
 }
 
-
+// 循环反转部分链表
 function reveseForSome(head, from, to) {
     let preLeft
     let left
@@ -118,5 +118,33 @@ function reveseForSome(head, from, to) {
     return vitual.next
 }
 
-console.log('333', reveseForSome(list._head, 1, 4));
+// console.log('333', reveseForSome(list._head, 1, 4));
+
+//头插法
+function inseartHead(head, from, to) {
+
+    let cur
+    let pre
+
+    const obj = {}
+    obj.next = head
+    pre = obj
+    for (let i = 0; i < from - 1; i++) {
+        pre = pre.next
+    }
+
+    cur = pre.next
+
+    for (let i = 0; i < to - from; i++) {
+        const next = cur.next
+        cur.next = next.next
+        next.next = pre.next
+        pre.next = next
+    }
+
+    return obj.next
+}
+
+console.log('333', inseartHead(list._head, 2, 5));
+
 
