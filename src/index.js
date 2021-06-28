@@ -66,8 +66,57 @@ function reviseIncludeList(header, from, to) {
 
 
 }
-console.log('222', reviseIncludeList(list._head, 2, 4),);
+// console.log('222', reviseIncludeList(list._head, 2, 4),);
 
 // reviseIncludeList(list)
+// 递归循环写法
+function reveseFor(head) {
+    let pre = null
+    let cur = head
+    let newHead
+    while (cur) {
+        if (cur.next === null) {
+            newHead = cur
+        }
+        const next = cur.next
+        cur.next = pre
+        pre = cur
+        cur = next
+    }
+    return newHead
+}
 
+
+function reveseForSome(head, from, to) {
+    let preLeft
+    let left
+    let right
+    let rightNext
+
+
+    let vitual = {}
+    vitual.next = head
+    preLeft = vitual
+    for (let i = 0; i < from - 1; i++) {
+        preLeft = preLeft.next
+    }
+
+    right = preLeft
+    left = preLeft.next
+    for (let i = 0; i <= to - from; i++) {
+        right = right.next
+    }
+    rightNext = right.next
+
+    preLeft.next = null
+    right.next = null
+
+    const newHead = reveseFor(left)
+
+    preLeft.next = newHead
+    left.next = rightNext
+    return vitual.next
+}
+
+console.log('333', reveseForSome(list._head, 1, 4));
 
