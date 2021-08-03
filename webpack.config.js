@@ -7,6 +7,7 @@ module.exports = {
     // 记住在生产环境下 import 会自动tree-shaking 会自动去掉没用的代码，但是require不能，
     //这是import的好处
     mode: 'development',
+    devtool: "source-map", // 2. 这个配置必须
     devServer: {
         // 启用热更新
         hot: true,

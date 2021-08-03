@@ -29,3 +29,52 @@ var constructMaximumBinaryTree = function (nums) {
 
 // const i = constructMaximumBinaryTree([3, 2, 1, 6, 0, 5])
 // console.log('ggggg', i);
+
+var merge = function (nums1, m, nums2, n) {
+    let newList = []
+    let num1 = 0
+    let num2 = 0
+    while (num1 < m && num2 < n) {
+        debugger
+        if (nums1[num1] <= nums2[num2]) {
+            newList.push(nums1[num1])
+            num1++
+        } else {
+            newList.push(nums2[num2])
+            num2++
+        }
+    }
+    if (num1 === m) {
+        newList = newList.concat(nums2.slice(num2, n))
+    } else if (num2 == n) {
+        newList = newList.concat(nums1.slice(num1, m))
+    }
+    return newList
+};
+
+// console.log('ssssssssss', merge([1, 2, 3, 0, 0, 0], 3, [2, 5, 6], 3));
+
+// 寻找重复数 二分法
+var findDuplicate = function (nums) {
+    let left = 1
+    let right = nums.length - 1
+    const n = nums.length - 1
+    while (left < right) {
+
+        const mid = Math.floor((left + right) / 2)
+        let i = 0
+        for (let i = 0; i <= n; i++) {
+            if (nums[i] <= mid) {
+                i++
+            }
+        }
+        if (i <= mid) {
+            left = mid + 1
+        } else {
+            right = mid
+        }
+    }
+
+    return right
+};
+console.log('ssssssssss', findDuplicate([1, 3, 4, 2, 2]));
