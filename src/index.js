@@ -7,7 +7,6 @@ function TreeNode(val, left, right) {
 var constructMaximumBinaryTree = function (nums) {
     if (nums.length === 0) return null
     if (nums.length <= 1) return new TreeNode(nums[0])
-    debugger
     let index = 0
     let max = nums[0]
 
@@ -55,26 +54,86 @@ var merge = function (nums1, m, nums2, n) {
 // console.log('ssssssssss', merge([1, 2, 3, 0, 0, 0], 3, [2, 5, 6], 3));
 
 // 寻找重复数 二分法
-var findDuplicate = function (nums) {
-    let left = 1
-    let right = nums.length - 1
-    const n = nums.length - 1
-    while (left < right) {
+// var findDuplicate = function (nums) {
 
-        const mid = Math.floor((left + right) / 2)
-        let i = 0
-        for (let i = 0; i <= n; i++) {
-            if (nums[i] <= mid) {
-                i++
-            }
-        }
-        if (i <= mid) {
-            left = mid + 1
-        } else {
-            right = mid
-        }
+//     let left = nums[0]
+//     let right = nums[0]
+//     do {
+//         left = nums[left]
+//         right = nums[nums[right]]
+//     }
+//     while (left !== right)
+//     left = nums[0]
+//     while (left !== right) {
+//         left = nums[left]
+//         right = nums[right]
+//     }
+//     return left
+// };
+// console.log('ssssssssss', findDuplicate([1, 3, 4, 2, 2]));
+
+// function merges(l, mid, r, arr) {
+//     const newArr = []
+//     let p1 = l
+//     let p2 = mid + 1
+//     let p3 = 0
+//     while (p1 <= mid && p2 <= r) {
+//         const target = arr[p1] > arr[p2] ? arr[p2++] : arr[p1++];
+//         newArr.push(target)
+//     }
+//     while (p1 <= mid) {
+//         newArr.push(arr[p1++])
+//     }
+//     while (p2 <= r) {
+//         newArr.push(arr[p2++])
+//     }
+
+//     for (let i = l; i <= r; i++) {
+//         arr[i] = newArr[p3++]
+//     }
+
+// }
+function mergeing(l, mid, r, arr) {
+    let minTotal = 0
+    const newArr = []
+    let p1 = l
+    let p2 = mid + 1
+    let p3 = 0
+
+    while (p1 <= mid && p2 <= r) {
+        debugger
+        const target = arr[p1] > arr[p2] ? arr[p2] : arr[p1]
+        minTotal += arr[p2] > arr[p1] ? arr[p1] * (r - p2 + 1) : 0
+        arr[p1] > arr[p2] ? p2++ : p1++
+        debugger
+        newArr.push(target)
     }
+    while (p1 <= mid) {
+        newArr.push(arr[p1++])
+    }
+    while (p2 <= r) {
+        minTotal += arr[p2] * (r - p2)
+        newArr.push(arr[p2++])
+    }
+    for (let i = l; i <= r; i++) {
+        arr[i] = newArr[p3++]
+    }
+    return minTotal
+}
 
-    return right
+const s = "ab", t = "eidbaooo"
+var sortArray = function (arr) {
+    function doSortArray(array, left, right) {
+        if (left === right) return 0
+        const mid = Math.floor(right + (left - right) / 2)
+        const a = doSortArray(array, left, mid)
+        debugger
+        const b = doSortArray(array, mid + 1, right)
+        return a + b + mergeing(left, mid, right, array)
+    }
+    return doSortArray(arr, 0, arr.length - 1)
+
 };
-console.log('ssssssssss', findDuplicate([1, 3, 4, 2, 2]));
+
+
+console.log('sssss', sortArray([1, 3, 4, 2, 5]))
