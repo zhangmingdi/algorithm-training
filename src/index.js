@@ -170,4 +170,40 @@ var quickSort = function (arr) {
     doQuickSort(0, arr.length - 1, arr)
     return arr
 }
-console.log('sssss', quickSort([1, 2, 3, 4, 5, 6, 111, 222, 44, 22, 33]))
+// console.log('sssss', quickSort([1, 2, 3, 4, 5, 6, 111, 222, 44, 22, 33]))
+
+function heapInseart(arr, heapSize) {
+    debugger
+    if (heapSize === 1) return
+    [arr[0], arr[heapSize - 1]] = [arr[heapSize - 1], arr[0]]
+    let rootIndex = 0
+    let leftIndex = 2 * rootIndex + 1
+    while (leftIndex < heapSize - 1) {
+        debugger
+        const largerIndex = leftIndex + 1 < heapSize - 1 && arr[leftIndex + 1] > arr[leftIndex] ? leftIndex + 1 : leftIndex
+        if (arr[rootIndex] >= arr[largerIndex]) break
+        [arr[rootIndex], arr[largerIndex]] = [arr[largerIndex], arr[rootIndex]]
+        rootIndex = largerIndex
+        leftIndex = 2 * rootIndex + 1
+    }
+    heapInseart(arr, heapSize - 1)
+}
+
+var heapSort = function (arr) {
+    let i = 0
+    while (i <= arr.length - 1) {
+        let rootIndex = Math.floor((i - 1) / 2)
+        let current = i
+        while (rootIndex >= 0 && arr[current] > arr[rootIndex]) {
+            [arr[rootIndex], arr[current]] = [arr[current], arr[rootIndex]]
+            current = rootIndex
+            rootIndex = Math.floor((rootIndex - 1) / 2)
+        }
+        i++
+    }
+    let heapSize = arr.length
+
+    heapInseart(arr, heapSize)
+    return arr
+}
+console.log('sssss', heapSort([5, 2, 3, 1]))
