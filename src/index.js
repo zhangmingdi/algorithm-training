@@ -135,5 +135,39 @@ var sortArray = function (arr) {
 
 };
 
+// console.log('sssss', sortArray([1, 3, 4, 2, 5]))
 
-console.log('sssss', sortArray([1, 3, 4, 2, 5]))
+
+//快速排序
+var quickSort = function (arr) {
+
+    function doQuickSort(l, r, arr) {
+        if (r > l) {
+            const mid = arr[Math.floor(l + Math.random() * (r - l + 1))]
+            let less = l
+            let more = r + 1
+            let i = l
+            while (i < more) {
+                if (arr[i] < mid) {
+                    [arr[i], arr[less]] = [arr[less], arr[i]]
+                    less++
+                    i++
+                } else if (arr[i] > mid) {
+                    [arr[i], arr[more - 1]] = [arr[more - 1], arr[i]]
+                    more--
+                } else {
+                    i++
+                }
+            }
+
+            doQuickSort(l, less - 1, arr)
+            doQuickSort(more, r, arr)
+
+        }
+
+    }
+
+    doQuickSort(0, arr.length - 1, arr)
+    return arr
+}
+console.log('sssss', quickSort([1, 2, 3, 4, 5, 6, 111, 222, 44, 22, 33]))
