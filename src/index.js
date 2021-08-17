@@ -173,37 +173,57 @@ var quickSort = function (arr) {
 // console.log('sssss', quickSort([1, 2, 3, 4, 5, 6, 111, 222, 44, 22, 33]))
 
 function heapInseart(arr, heapSize) {
-    debugger
+    // debugger
     if (heapSize === 1) return
     [arr[0], arr[heapSize - 1]] = [arr[heapSize - 1], arr[0]]
     let rootIndex = 0
     let leftIndex = 2 * rootIndex + 1
     while (leftIndex < heapSize - 1) {
-        debugger
+        // debugger
         const largerIndex = leftIndex + 1 < heapSize - 1 && arr[leftIndex + 1] > arr[leftIndex] ? leftIndex + 1 : leftIndex
         if (arr[rootIndex] >= arr[largerIndex]) break
         [arr[rootIndex], arr[largerIndex]] = [arr[largerIndex], arr[rootIndex]]
         rootIndex = largerIndex
         leftIndex = 2 * rootIndex + 1
     }
+    debugger
     heapInseart(arr, heapSize - 1)
 }
 
-var heapSort = function (arr) {
-    let i = 0
-    while (i <= arr.length - 1) {
-        let rootIndex = Math.floor((i - 1) / 2)
+function heapFy(arr) {
+    let i = arr.length - 1
+    while (i >= 0) {
+        let leftIndex = 2 * i + 1
         let current = i
-        while (rootIndex >= 0 && arr[current] > arr[rootIndex]) {
-            [arr[rootIndex], arr[current]] = [arr[current], arr[rootIndex]]
-            current = rootIndex
-            rootIndex = Math.floor((rootIndex - 1) / 2)
+        while (leftIndex <= arr.length - 1) {
+            let maxIndex = leftIndex + 1 <= arr.length - 1 && arr[leftIndex + 1] > arr[leftIndex] ? leftIndex + 1 : leftIndex
+            if (arr[maxIndex] <= arr[current]) break
+            [arr[maxIndex], arr[current]] = [arr[current], arr[maxIndex]]
+            current = maxIndex
+            leftIndex = 2 * maxIndex + 1
         }
-        i++
+        i--
+        debugger
     }
-    let heapSize = arr.length
 
-    heapInseart(arr, heapSize)
+}
+
+var heapSort = function (arr) {
+    //建立大根堆自上而下
+    // let i = 0
+    // while (i <= arr.length - 1) {
+    //     let rootIndex = Math.floor((i - 1) / 2)
+    //     let current = i
+    //     while (rootIndex >= 0 && arr[current] > arr[rootIndex]) {
+    //         [arr[rootIndex], arr[current]] = [arr[current], arr[rootIndex]]
+    //         current = rootIndex
+    //         rootIndex = Math.floor((rootIndex - 1) / 2)
+    //     }
+    //     i++
+    // }
+    heapFy(arr)
+    debugger
+    heapInseart(arr, arr.length)
     return arr
 }
-console.log('sssss', heapSort([5, 2, 3, 1]))
+console.log('sssss', heapSort([-4, 0, 7, 4, 9, -5, -1, 0, -7, -1]))
