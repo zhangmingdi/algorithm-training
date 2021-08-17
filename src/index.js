@@ -191,30 +191,36 @@ function heapInseart(arr, heapSize) {
 }
 
 function heapFy(arr) {
+    // 自下而上进行大定堆建立
     let i = arr.length - 1
     while (i >= 0) {
+        // 先拿它都左右节点比较，把它变为一个大顶堆
         let leftIndex = 2 * i + 1
         let current = i
+
         while (leftIndex <= arr.length - 1) {
             let maxIndex = leftIndex + 1 <= arr.length - 1 && arr[leftIndex + 1] > arr[leftIndex] ? leftIndex + 1 : leftIndex
             if (arr[maxIndex] <= arr[current]) break
             [arr[maxIndex], arr[current]] = [arr[current], arr[maxIndex]]
+            // 记住一定要下沉，！！！！
             current = maxIndex
             leftIndex = 2 * maxIndex + 1
         }
         i--
-        debugger
     }
 
 }
 
 var heapSort = function (arr) {
-    //建立大根堆自上而下
+    //建立大根堆自上而下,思想：每次新加入一个都数，都要和它都根结点比较，然后知道比较到最顶端
     // let i = 0
     // while (i <= arr.length - 1) {
+    //拿到该节点到父节点位置
     //     let rootIndex = Math.floor((i - 1) / 2)
     //     let current = i
+
     //     while (rootIndex >= 0 && arr[current] > arr[rootIndex]) {
+    // 进行比较然后把比较大值推到顶端
     //         [arr[rootIndex], arr[current]] = [arr[current], arr[rootIndex]]
     //         current = rootIndex
     //         rootIndex = Math.floor((rootIndex - 1) / 2)
