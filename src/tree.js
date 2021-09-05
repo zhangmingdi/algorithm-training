@@ -45,3 +45,18 @@ export default function constructorTree(arr) {
     return root
 }
 
+// 选招一个树的中的特定节点并且返回 没有返回并且报错
+export function findNodeIntree(root, val) {
+    if (root === null) throw new Error('没有该节点')
+    const stack = []
+    while (root !== null || stack.length > 0) {
+        while (root !== null) {
+            if (root.val === val) return root
+            stack.push(root)
+            root = root.left
+        }
+        root = stack.pop()
+        root = root.right
+    }
+    throw new Error('没有该节点')
+}

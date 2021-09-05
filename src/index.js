@@ -1,5 +1,5 @@
 import list from './list'
-import constructorTree from './tree'
+import constructorTree, { findNodeIntree } from './tree'
 
 function TreeNode(val, left, right) {
     this.val = (val === undefined ? 0 : val)
@@ -12,93 +12,62 @@ const root = new TreeNode(
         null
     )
 )
-const arr = [5, 1, 4, null, null, 3, 6]
+const arr = [3, 5, 1, 6, 2, 0, 8, null, null, 7, 4]
 const tree = constructorTree(arr)
-console.log('tree', arr, constructorTree(arr));
-// 完全二叉树验证
-function isValid(root) {
-    if (root === null) return true
-    const queue = []
-    let islast = false
-    queue.unshift(root)
-    while (queue.length > 0) {
-        const node = queue.pop()
-        if (node.left === null && node.right !== null) return false
-        if (islast && (node.left !== null || node.right !== null)) return false
-        if (node.left === null || node.right === null) {
-            islast = true
-        }
+const p = findNodeIntree(tree, 5)
+const q = findNodeIntree(tree, 1)
+console.log('tree', arr, constructorTree(arr),);
+console.log('treeFind', arr, findNodeIntree(tree, 5), findNodeIntree(tree, 1));
 
-        if (!islast && node.left !== null) {
-            queue.unshift(node.left)
-        }
-        if (!islast && node.right !== null) {
-            queue.unshift(node.right)
-        }
-    }
-    return true
+// 构建每个节点的父节点的哈希表
+function recorderFather(head, hashMap) {
+    if (head === null) return
+    head.left && hashMap.set(head.left, head)
+    head.right && hashMap.set(head.right, head)
+    recorderFather(head.left, hashMap)
+    recorderFather(head.right, hashMap)
 }
-// console.log('root', root,);
 
-// console.log('sssss', isValid(root));
-// 平衡二叉树的验证
-var isBalanced = function (root) {
-    // 二叉树的递归套路  可以明确函数的定义是做什么的 
-    //然后最终结果可不可以通过左右子节点得到想要的值
-    function process(root) {
-
-        if (root === null) return {
-            bool: true,
-            height: 1
-        }
-
-        const leftInfo = process(root.left)
-        const rightInfo = process(root.right)
-
-        const bool = leftInfo.bool && rightInfo.bool && (Math.abs(leftInfo.height - rightInfo.height)) < 2
-        return {
-            bool,
-            height: leftInfo.height > rightInfo.height ? leftInfo.height + 1 : rightInfo.height + 1
-        }
+// 寻找二叉树的最近公共祖先 哈希表法（不知道为什么力扣会出现栈溢出）
+var lowestCommonAncestor0 = function (root, p, q) {
+    const hashMap = new Map()
+    const hashSet = new Set()
+    hashMap.set(root, root)
+    //记录所有节点的父节点
+    recorderFather(root, hashMap)
+    let current = p
+    // 记录p节点的轨迹
+    while (current !== hashMap.get(current)) {
+        hashSet.add(current)
+        current = hashMap.get(current)
     }
-    return process(root).bool
-};
-// console.log('ssss', isBalanced(tree));
-
-// 二叉搜索树验证 递归训练写法
-// 明确一下左树和右树需要给你什么
-var isValidBST = function (root) {
-    function returnProcess(root) {
-        if (root === null) return null
-
-        const leftData = returnProcess(root.left)
-        const rightData = returnProcess(root.right)
-
-        let min = root.val
-        let max = root.val
-
-        if (leftData !== null) {
-            min = leftData.min > min ? min : leftData.min
-        }
-        if (rightData !== null) {
-            max = rightData.max < max ? max : rightData.max
-        }
-        let isBst = true
-
-        if ((leftData !== null) && (!leftData.isBst || leftData.max >= root.val)) {
-            isBst = false
-        }
-
-        if ((rightData !== null) && (!rightData.isBst || rightData.min <= root.val)) {
-            isBst = false
-        }
-        return {
-            isBst,
-            min,
-            max
-        }
+    hashSet.add(root)
+    // 寻找q节点与p节点相交点
+    while (!hashSet.has(q)) {
+        q = hashMap.get(q)
     }
-    return returnProcess(root).isBst
+    return q
 };
+// console.log('ssss', lowestCommonAncestor(tree, p, q));
 
-console.log('isValidBST', isValidBST(tree));
+//// 寻找二叉树的最近公共祖先 递归法，  每棵树 希望它返回p或者q节点，有汇聚点就返回汇聚点，其它的返回null
+var lowestCommonAncestor = function (root, p, q) {
+    // 每棵树 希望它返回p或者q节点，没的话返回null
+    if (root === null) return null
+    if (root === q) return root
+    if (root === p) return root
+
+    let leftNode = lowestCommonAncestor(root.left, p, q)
+    let rightNode = lowestCommonAncestor(root.right, p, q)
+
+    // 啥都没有就返回null
+    if (leftNode === null && rightNode === null) return null
+
+    // 汇聚点的判断
+    if (leftNode !== null && rightNode !== null) return root
+
+    // 当汇聚点与null节点的判断
+    return leftNode ? leftNode : rightNode
+
+};
+console.log('ssss', lowestCommonAncestor(tree, p, q));
