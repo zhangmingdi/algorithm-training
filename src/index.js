@@ -1,129 +1,111 @@
+// 矩阵01求岛屿问题
+// https://leetcode-cn.com/problems/number-of-islands/
 /**
- * @param {number[]} A
- * @param {number[]} B
- * @param {number[]} C
- * @return {void} Do not return anything, modify C in-place instead.
+ * @param {character[][]} grid
+ * @return {number}
  */
-//https://leetcode-cn.com/problems/hanota-lcci/
-var hanota = function (A, B, C) {
-    const n = A.length
-    function move(num, a, b, c) {
-        //base case最后一个
-        if (num === 1) {
-            c.push(a.pop())
-            return
-        }
-
-
-        //汉诺塔经典递归问题 记住一个点
-        //a柱子的n圆盘要移到c柱子===先移动n-1柱子到b柱子，
-        move(num - 1, a, c, b)
-
-        //接着把a柱子最底的移到c柱子最底部
-        c.push(a.pop())
-
-        //转换问题 b柱子n-1圆盘移动到c
-        move(num - 1, b, a, c)
-    }
-    move(n, A, B, C)
-};
-
-
-// 打印一个字符串的子串 明白子串的原理就能递归做出来
-// 讲究顺序的子串 可以用二叉树画出来
-var printCharacterSon = (str) => {
-    function doPrint(i, str, lastStr, arr = []) {
-        if (i === str.length) {
-            return arr.push(lastStr)
-        }
-        const composed = lastStr + str[i]
-        doPrint(i + 1, str, composed, arr)
-        doPrint(i + 1, str, lastStr, arr)
-        return arr
-    }
-    return doPrint(0, str, '')
-}
-
-// https://leetcode-cn.com/problems/zi-fu-chuan-de-pai-lie-lcof/
-//字符串的排列（回溯？暴力递归？）
-/**
- * @param {string} s
- * @return {string[]}
- */
-var permutation = function (s) {
-
-    const map = new Map()
-
-    // 字符创替换
-    function swap(str, j, k) {
-        // str.jo
-        const arrStr = str.split('')
-        const saveStr = arrStr[j]
-        arrStr[j] = arrStr[k]
-        arrStr[k] = saveStr
-        return arrStr.join('')
-    }
-
-    function doPermutation(n, s, arr = []) {
-        if (n === s.length) {
-            if (!map.has(s)) {
-                arr.push(s)
-                map.set(s, true)
+var numIslands = function (grid) {
+    const n = grid.length - 1
+    const m = grid[0].length - 1
+    let res = 0
+    for (let i = 0; i <= n; i++) {
+        for (let j = 0; j <= m; j++) {
+            if (grid[i][j] === '1') {
+                res++
+                // 简单的递归调用
+                injectd(grid, i, j, n, m)
             }
-            return
+
         }
-        //利用替换字符串来限制下一位的排列，然后排列完成之后在替换回字符串
-        for (let i = n; i < s.length; i++) {
-            s = swap(s, n, i)
-            doPermutation(n + 1, s, arr)
-            s = swap(s, n, i)
-        }
-        return arr
     }
-    return doPermutation(0, s,)
+    return res
+};
+// 感染函数
+function injectd(grid, i, j, n, m) {
+    if (i < 0 || i > n || j < 0 || j > m || grid[i][j] !== "1") return
+    grid[i][j] = 2
+    injectd(grid, i + 1, j, n, m)
+    injectd(grid, i - 1, j, n, m)
+    injectd(grid, i, j + 1, n, m)
+    injectd(grid, i, j - 1, n, m)
+}
+
+// 01背包问题二维动态规划
+// 需要自己把表画出来
+function getBigger(list, packge) {
+    let arr = []
+    for (let i = 0; i < list.length; i++) {
+        arr[i] = []
+        for (let j = 0; j <= packge; j++) {
+            if (j === 0) {
+                arr[i][j] = 0
+            } else {
+                if (list[i].weight > j) {
+                    arr[i][j] = arr[i - 1]?.[j] || 0
+                } else {
+                    arr[i][j] = Math.max(list[i].val + arr[i - 1]?.[j - list[i]?.val || 0], arr[i - 1]?.[j] || 0)
+                }
+            }
+        }
+    }
+    return arr[list.length - 1][packge]
+}
+
+// 零钱兑换，最少硬币个数
+/**
+ * @param {number[]} coins
+ * @param {number} amount
+ * @return {number}
+ */
+//  https://leetcode-cn.com/problems/coin-change/
+var coinChange = function (coins, amount) {
+    // 解题思路 二维数组 
+    // 核心公式 当有这么i个硬币的时候的最优解 1.可能不需要这个金币2.需要这个金币
+    //边界判断-1个金币的判断 -j金额的判断
+    let arr = []
+    for (let i = 0; i < coins.length; i++) {
+        arr[i] = []
+        for (let j = 0; j <= amount; j++) {
+            if (i === 0 && j === 0) {
+                arr[i][j] = 0
+            } else {
+                let coin = i - 1
+                let surplus = j - coins[i]
+                //边界判断-1个金币的判断 -j金额的判断
+                let left = coin < 0 ? Number.MAX_VALUE : arr[coin][j]  // 1.可能不需要这个金币
+                let right = surplus < 0 ? Number.MAX_VALUE : arr[i][surplus] + 1 //2.需要这个金币
+
+                arr[i][j] = Math.min(left, right)
+            }
+        }
+    }
+    return arr[coins.length - 1][amount] === Number.MAX_VALUE ? -1 : arr[coins.length - 1][amount]
 };
 
-// console.log("permutation", permutation("aab")); 
-// 栈的逆序 结合弹出栈底
-function reverseStack(arr) {
-    if (arr.length === 0) return
-    const item = popStackLast(arr)
-    reverseStack(arr)
-    arr.push(item)
-    return arr
-}
-// 弹出栈底
-function popStackLast(stack) {
-    const item = stack.pop()
-    if (stack.length === 0) return item
-    const last = popStackLast(stack)
-    stack.push(item)
-    return last
-}
+// console.log('coinChange', coinChange([1, 2, 5], 0));
 
-// console.log('sdsdsd', reverseStack([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]));
-
+// 零钱兑换2，最少硬币个数
 /**
- * @param {number[]} piles
- * @return {boolean}
+ * @param {number} amount
+ * @param {number[]} coins
+ * @return {number}
  */
-//  https://leetcode-cn.com/problems/stone-game/
-// 纸牌游戏，
-
-// 先手函数 总会往自己最好的结果去走
-function f(arr, l, r) {
-    if (l === r) return arr[l]
-    return Math.max(arr[l] + s(arr, l + 1, r), arr[r] + s(arr, l, r - 1))
-}
-// 后手函数 被动地走自己最坏的结果去走
-function s(arr, l, r) {
-    if (l === r) return 0
-    return Math.min(f(arr, l + 1, r), f(arr, l, r - 1))
-}
-
-var stoneGame = function (piles) {
-    if (!piles || !piles.length) return false
-
-    return f(piles, 0, piles.length - 1) > s(piles, 0, piles.length - 1)
+//  https://leetcode-cn.com/problems/coin-change-2/
+//同理上面 画一个二维数组
+var change = function (amount, coins) {
+    const arr = []
+    for (let i = 0; i < coins.length; i++) {
+        arr[i] = []
+        for (let j = 0; j <= amount; j++) {
+            if (i === 0 && j === 0) {
+                arr[i][j] = 1
+            } else {
+                const left = i - 1 < 0 ? 0 : arr[i - 1][j]
+                const right = j - coins[i] < 0 ? 0 : arr[i][j - coins[i]]
+                arr[i][j] = left + right
+            }
+        }
+    }
+    return arr[coins.length - 1][amount]
 
 };
