@@ -1,21 +1,27 @@
-/**
- * @param {string} num1
- * @param {string} num2
- * @return {string}
- */
-var addStrings = function (num1, num2) {
-    let top = num1.length - 1
-    let bottom = num2.length - 1
-    let str = ''
-    let add = 0
-    while (top >= 0 || bottom >= 0) {
-        const l = top >= 0 ? num1.charAt(top--) - 0 : 0
-        const r = bottom >= 0 ? num2.charAt(bottom--) - 0 : 0
-        debugger
-        str = (l + r + add) % 10 + str
-        add = (l + r + add) >= 10 ? 1 : 0
-    }
-    return add ? add + str : str
+import newList from "./list";
+
+
+var reverseList = function (head) {
+    if (!head || head.next === null) return head
+    const tail = reverseList(head.next)
+    head.next.next = head
+    head.next = null
+    return tail
 };
 
-console.log('sdsd', addStrings('1', '9'));
+var reverseList2 = function (head) {
+    let cur = head
+    let pre = null
+    debugger
+    while (cur) {
+        debugger
+        const curNext = cur.next
+        cur.next = pre
+        pre = cur
+        if (!curNext) break
+        cur = curNext
+    }
+    return cur
+};
+
+console.log('reverseList2', reverseList2(newList.head));
