@@ -1,25 +1,16 @@
-// https://leetcode-cn.com/problems/longest-increasing-subsequence/
-
+// 两数之和
+// https://leetcode-cn.com/problems/two-sum/submissions/
 /**
  * @param {number[]} nums
- * @return {number}
+ * @param {number} target
+ * @return {number[]}
  */
-//  最长递增子序列 dp数组
-var lengthOfLIS = function (nums) {
-    const dp = []
-    dp[0] = 1
-    let maxans = 1;
-
-    for (let i = 1; i < nums.length; i++) {
-        dp[i] = 1
-        for (j = 0; j < i; j++) {
-            if (nums[i] > nums[j]) {
-                dp[i] = Math.max(dp[i], dp[j] + 1)
-            }
+var twoSum = function (nums, target) {
+    const map = new Map()
+    for (let i = 0; i < nums.length; i++) {
+        if (map.has(target - nums[i])) {
+            return [map.get(target - nums[i]), i]
         }
-        maxans = Math.max(maxans, dp[i])
+        map.set(nums[i], i)
     }
-    return maxans
 };
-
-console.log('sdskds', lengthOfLIS([10, 9, 2, 5, 3, 7, 101, 18]));
