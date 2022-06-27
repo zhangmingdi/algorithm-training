@@ -3,6 +3,14 @@ import list from './list'
 
 let last
 
+//另一种解法，递归思想的训练
+function reverseList2(head) {
+    if (!head || head.next === null) return head
+    const header = reverseList(head.next)
+    head.next.next = head
+    head.next = null
+    return header
+}
 
 // 递归反转整个链表
 function reviseList(list) {
