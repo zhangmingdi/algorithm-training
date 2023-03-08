@@ -2,7 +2,7 @@
   "name": "webpackOptimization",
   "version": "1.0.0",
   "main": "index.js",
-  "author": "zhangmingdi <zhangmingdi@shein.com>",
+  "author": "zhangmingdi",
   "license": "MIT",
   "devDependencies": {
     "@babel/core": "^7.14.6",
